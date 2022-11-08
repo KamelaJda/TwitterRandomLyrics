@@ -1,0 +1,23 @@
+twitter:
+  geniusToken: 'genius token'
+
+  apiKey: 'twitter api key'
+  apiSecret: 'twitter secret'
+  callBack: 'http://localhost:3000'
+  scope: 'offline.access tweet.read tweet.write users.read'
+
+  artists:
+    - geniusId: '2137'
+    - geniusId: '420'
+
+spring:
+  datasource:
+    url: 'jdbc:postgresql://localhost:5432/verses'
+    username: 'user'
+    password: 'user_password'
+  jpa:
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+    hibernate:
+      ddl-auto: 'update'

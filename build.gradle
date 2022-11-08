@@ -1,0 +1,65 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id "io.freefair.lombok" version "6.5.1"
+    id 'java'
+}
+
+group = 'me.kamelajda'
+version = '1.0.0'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation "com.twitter:twitter-api-java-sdk:2.0.3"
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    runtimeOnly 'org.postgresql:postgresql'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+}
+
+build.dependsOn jar
+
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+
+artifacts {
+    archives shadowJar
+}
+
+tasks.named('compileJava') {
+    inputs.files(tasks.named('processResources'))
+}
+
+shadowJar {
+    manifest {
+        attributes 'Implementation-Title': 'TwitterRandomLyrics', 'Implementation-Version': this.version
+        attributes 'Main-Class': 'me.kamelajda.twitterrandomlyrics.TwitterRandomLyricsApplication'
+    }
+
+    mergeServiceFiles()
+    mergeGroovyExtensionModules()
+
+    mergeServiceFiles()
+    append 'META-INF/spring.handlers'
+    append 'META-INF/spring.schemas'
+    append 'META-INF/spring.tooling'
+    append 'META-INF/spring.factories'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+compileJava.options.encoding = 'UTF-8'
